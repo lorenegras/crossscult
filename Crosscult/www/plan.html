@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+
+<!--
+IndoorAtlas Cordova Plugin Examples
+https://github.com/IndoorAtlas/cordova-plugin
+https://github.com/IndoorAtlas/sdk-cordova-examples
+-->
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<html class="supernova">
+<head>
+  <meta name="format-detection" content="telephone=no">
+  <meta name="msapplication-tap-highlight" content="no">
+  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta property="og:title" content="JotForm" >
+  <meta property="og:url" content="http://www.jotformeu.com/form/71401283074347" >
+  <meta property="og:description" content="Please click the link to complete this form.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+  <link rel="stylesheet" type="text/css" href="css/index.css">
+  <link href="css/formCss.css" rel="stylesheet" type="text/css" />
+  <link type="text/css" rel="stylesheet" href="css/nova.css" />
+  <link type="text/css" media="print" rel="stylesheet" href="css/printForm.css" />
+  <link type="text/css" rel="stylesheet" href="css/css1.css"/>
+  <link type="text/css" rel="stylesheet" href="css/form-submit-button-light.css"/>
+  <script src="js/prototype.js" type="text/javascript"></script>
+  <script src="js/jotform.js" type="text/javascript"></script>
+  <script type="text/javascript">
+     JotForm.init();
+     JotForm.prepareCalculationsOnTheFly([null,{"name":"clickTo","qid":"1","text":"Experience de visite au MAN - CrossCult","type":"control_head"},{"name":"submitForm","qid":"2","text":"Envoyer","type":"control_button"},null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,{"name":"overallHow23","qid":"23","text":"Votre satisfaction globale a l&#039;issue de la visite :","type":"control_scale"},null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,{"name":"whatWas51","qid":"51","text":"Vous etes :","type":"control_radio"},{"name":"cliquezPour","qid":"52","text":"Quel est votre age?","type":"control_textbox"},{"name":"vousEtes","qid":"53","text":"Vous etes venu(e) :","type":"control_radio"},null,null,null,null,{"name":"vousEtes58","qid":"58","text":"Etes-vous deja venu(e) au Museum-Aquarium de Nancy avant aujourd’hui ? ","type":"control_radio"},{"name":"votreSatisfaction","qid":"59","text":"Votre humeur du jour :","type":"control_scale"},{"name":"votreSatisfaction60","qid":"60","text":"Avez-vous trouve qu’il y avait une grande variete d’especes exposees ?","type":"control_scale"},{"name":"votreSatisfaction61","qid":"61","text":"A quel point avez-vous ete gene(e) par la foule durant la visite ?","type":"control_scale"},{"name":"votreSatisfaction62","qid":"62","text":"Avez-vous eu l’impression de parcourir une grande distance dans le Museum Aquarium ?","type":"control_scale"},{"name":"votreSatisfaction63","qid":"63","text":"Quel est votre niveau de fatigue a l’issue de la visite ?","type":"control_scale"},{"name":"cliquerPour","qid":"64","text":"Vous trouvez que l’utilisation d’une application sur smartphone ou tablette dans un musee est :","type":"control_checkbox"},{"name":"cliquerPour65","qid":"65","text":"Avez-vous des commentaires a l’issue de votre visite ?","type":"control_textarea"},{"name":"cliquezPour66","qid":"66","text":"ID Unique","type":"control_textbox"}]);
+	</script>
+	<title>Crosscult</title>
+</head>
+
+<body>
+<!-- Contenu du plan : s'affiche lorqu'on arrive sur la page, puis avec le bouton "passer au questionnaire" disparraît pour laisser place au questionnaire <div id="quizz"> -->
+<div id="plan">
+<!-- lien avec Google Map -->
+  <div id="googleMap" style="position:absolute;top:0;left:0;right:0;bottom:0;"></div>
+<!-- Boutons se positionner, commencer, arrêter et passer au questionnaire -->
+  <div id="actions" class="demoaction">
+    <button class="demobutton" id="setPositionButton">Se positionner</button>
+    <button class="demobutton" id="startPositioningButton">Commencer</button>
+    <button class="demobutton" id="stopPositioningButton">Arrêter</button></br>
+	<button class="demobutton" id="goToQuizz" onClick="passerAuxQuestions()">Passer au questionnaire</button>
+	</div>  
+  </div>
+<!-- Pour afficher le Plan -->
+  <div id="watchlog" class="demowatch"><div class="centerText">-</div></div>
+  <div class="app">
+    <div id="deviceready" class="blink">
+      <p class="event listening">Connecting to Device</p>
+      <p class="event received">Device is Ready</p>
+    </div>
+  </div>
+</div>  
+<!-- Contenu du Questionnaire qui s'affiche avec le bouton "passer au questionnaire" -->
+<div id="quizz">
+<!-- lien avec JotForm qui génére le questionnaire et rempli les données dans un GoogleSheet-->
+<!-- compte JotForm -> Nom d'utilisateur : Crosscult    mdp : crosscult -->
+<!-- vous pouvez modifier le login et le mdp si vous le souhaitez dans les paramètres du site--> 
+<!-- nous avons obtés pour ce choix là car nous ne pouvions pas faire le lien entre le parcours et les réponses au questionnaire. -->
+<!-- c'est pourquoi, nous intégrons le questionnaire au code cordova et nous l'affichons sur la même page que le plan pour récupérer l'id du visiteur et ainsi pour faire le lien entre le parcours et les réponses au questionnaire -->
+<!-- à chaque questionnaire rempli via l'application, vous recevrez un email à l'adresse equipe.kiwi@gmail.com (pour l'instant, les réponses sont envoyées à une autre adresse gmail, cette adresse sera modifiée après la soutenance) -->
+<!-- grâce à l'email, JotForm crée dans le drive de Google un Google Sheet avec toutes les réponses envoyées -->
+<!-- vous pouvez donc récupérer les réponses au questionnaire ainsi que l'id de l'utilisateur associé avec ce tableau -->
+<!-- si vous souhaitez le faire avec Google Form par la suite, voici le lien que nous avons créé : https://docs.google.com/forms/d/e/1FAIpQLSd54cKWi_KgmGzQz0TTt4ZSviVcSoTNErvmBPwPE8eyzy8j4w/viewform?c=0&w=1-->
+<!-- et voici le lien pour modifier le Google Form : https://docs.google.com/forms/d/1sCm54SRc1MXunWYZEGHPkbmPBiGmtvfRV1_wt0dQjxo/edit -->
+<!-- Formulaire JotForm--> 
+  <form class="jotform-form" action="https://submit.jotformeu.com/submit/71401283074347/" method="post" name="form_71401283074347" id="71401283074347" accept-charset="utf-8">
+    <!-- titre et phrases d'introduction -->
+	<input type="hidden" name="formID" value="71401283074347" />
+    <div class="form-all">	
+    <ul class="form-section page-section">
+      <li id="cid_1" class="form-input-wide" data-type="control_head">
+        <div class="form-header-group ">
+          <div class="header-text httal htvam">
+            <h1 id="header_1" class="form-header" data-component="header">
+              Expérience de visite au MAN - CrossCult
+            </h1>
+            <div id="subHeader_1" class="form-subHeader">
+              Questionnaire d&#x27;étude des comportements de visite dans le cadre d’une collaboration entre le laboratoire de recherche LORIA et le Muséum-Aquarium de Nancy.
+            </div>
+          </div>
+        </div>
+      </li>
+	  <!-- input caché caractérisant l'id du visiteur qui sera rempli par la suite dans le GoogleSheet -->
+      <li class="form-line always-hidden jf-required" data-type="control_textbox" id="id_66">
+        <label class="form-label form-label-top" id="label_66" for="input_66">
+          ID Unique
+          <span class="form-required">
+            *
+          </span>
+        </label>
+        <div id="cid_66" class="form-input-wide always-hidden jf-required">
+          <input type="text" id="input_66" name="q66_cliquezPour66" data-type="input-textbox" class="form-readonly form-textbox validate[required]" size="20" value="" tabindex="-1" data-component="textbox" readonly="" required="" />
+        </div>
+      </li>
+	  <!-- Début des questions du questionnaire visibles par l'utilisateur -->
+      <li class="form-line jf-required" data-type="control_radio" id="id_51">
+        <label class="form-label form-label-top form-label-auto" id="label_51" for="input_51">
+          Vous êtes :
+          <span class="form-required">
+            *
+          </span>
+        </label>
+        <div id="cid_51" class="form-input-wide jf-required">
+          <div class="form-single-column" data-component="radio">
+            <span class="form-radio-item" style="clear:left;">
+              <span class="dragger-item">
+              </span>
+              <input type="radio" class="form-radio validate[required]" id="input_51_0" name="q51_whatWas51" value="Homme" required="" />
+              <label id="label_input_51_0" for="input_51_0"> Homme </label>
+            </span>
+            <span class="form-radio-item" style="clear:left;">
+              <span class="dragger-item">
+              </span>
+              <input type="radio" class="form-radio validate[required]" id="input_51_1" name="q51_whatWas51" value="Femme" required="" />
+              <label id="label_input_51_1" for="input_51_1"> Femme </label>
+            </span>
+            <span class="form-radio-item" style="clear:left;">
+              <span class="dragger-item">
+              </span>
+              <input type="radio" class="form-radio validate[required]" id="input_51_2" name="q51_whatWas51" value="Autre" required="" />
+              <label id="label_input_51_2" for="input_51_2"> Autre </label>
+            </span>
+          </div>
+        </div>
+      </li>
+      <li class="form-line jf-required" data-type="control_textbox" id="id_52">
+        <label class="form-label form-label-top form-label-auto" id="label_52" for="input_52">
+          Quel est votre âge?
+          <span class="form-required">
+            *
+          </span>
+        </label>
+        <div id="cid_52" class="form-input-wide jf-required">
+          <input type="text" id="input_52" name="q52_cliquezPour" data-type="input-textbox" class="form-textbox validate[required]" size="20" value="" data-component="textbox" required="" />
+        </div>
+      </li>
+      <li class="form-line jf-required" data-type="control_radio" id="id_53">
+        <label class="form-label form-label-top form-label-auto" id="label_53" for="input_53">
+          Vous êtes venu(e) :
+          <span class="form-required">
+            *
+          </span>
+        </label>
+        <div id="cid_53" class="form-input-wide jf-required">
+          <div class="form-single-column" data-component="radio">
+            <span class="form-radio-item" style="clear:left;">
+              <span class="dragger-item">
+              </span>
+              <input type="radio" class="form-radio validate[required]" id="input_53_0" name="q53_vousEtes" value="Seul(e)" required="" />
+              <label id="label_input_53_0" for="input_53_0"> Seul(e) </label>
+            </span>
+            <span class="form-radio-item" style="clear:left;">
+              <span class="dragger-item">
+              </span>
+              <input type="radio" class="form-radio validate[required]" id="input_53_1" name="q53_vousEtes" value="A deux" required="" />
+              <label id="label_input_53_1" for="input_53_1"> A deux </label>
+            </span>
+            <span class="form-radio-item" style="clear:left;">
+              <span class="dragger-item">
+              </span>
+              <input type="radio" class="form-radio validate[required]" id="input_53_2" name="q53_vousEtes" value="&gt; 2" required="" />
+              <label id="label_input_53_2" for="input_53_2"> > 2 </label>
+            </span>
+          </div>
+        </div>
+      </li>
+      <li class="form-line jf-required" data-type="control_radio" id="id_58">
+        <label class="form-label form-label-top form-label-auto" id="label_58" for="input_58">
+          Êtes-vous déjà venu(e) au Muséum-Aquarium de Nancy avant aujourd’hui ?
+          <span class="form-required">
+            *
+          </span>
+        </label>
+        <div id="cid_58" class="form-input-wide jf-required">
+          <div class="form-single-column" data-component="radio">
+            <span class="form-radio-item" style="clear:left;">
+              <span class="dragger-item">
+              </span>
+              <input type="radio" class="form-radio validate[required]" id="input_58_0" name="q58_vousEtes58" value="Oui" required="" />
+              <label id="label_input_58_0" for="input_58_0"> Oui </label>
+            </span>
+            <span class="form-radio-item" style="clear:left;">
+              <span class="dragger-item">
+              </span>
+              <input type="radio" class="form-radio validate[required]" id="input_58_1" name="q58_vousEtes58" value="Non" required="" />
+              <label id="label_input_58_1" for="input_58_1"> Non </label>
+            </span>
+          </div>
+        </div>
+      </li>
+      <li class="form-line jf-required" data-type="control_scale" id="id_23">
+        <label class="form-label form-label-top form-label-auto" id="label_23" for="input_23">
+          Votre satisfaction globale à l'issue de la visite :
+          <span class="form-required">
+            *
+          </span>
+        </label>
+        <div id="cid_23" class="form-input-wide jf-required">
+          <table summary="" cellpadding="4" cellspacing="0" class="form-scale-table" data-component="scale">
+            <tbody>
+              <tr>
+                <th>
+                   
+                </th>
+                <th style="text-align:center;">
+                  <label for="input_23_1"> 1 </label>
+                </th>
+                <th style="text-align:center;">
+                  <label for="input_23_2"> 2 </label>
+                </th>
+                <th style="text-align:center;">
+                  <label for="input_23_3"> 3 </label>
+                </th>
+                <th style="text-align:center;">
+                  <label for="input_23_4"> 4 </label>
+                </th>
+                <th style="text-align:center;">
+                  <label for="input_23_5"> 5 </label>
+                </th>
+                <th>
+                   
+                </th>
+              </tr>
+              <tr>
+                <td>
+                  <label for="input_23_1"> Très insatisfait </label>
+                </td>
+                <td style="text-align:center;">
+                  <input class="form-radio validate[required]" type="radio" name="q23_overallHow23" value="1" title="1" id="input_23_1" required="" />
+                </td>
+                <td style="text-align:center;">
+                  <input class="form-radio validate[required]" type="radio" name="q23_overallHow23" value="2" title="2" id="input_23_2" required="" />
+                </td>
+                <td style="text-align:center;">
+                  <input class="form-radio validate[required]" type="radio" name="q23_overallHow23" value="3" title="3" id="input_23_3" required="" />
+                </td>
+                <td style="text-align:center;">
+                  <input class="form-radio validate[required]" type="radio" name="q23_overallHow23" value="4" title="4" id="input_23_4" required="" />
+                </td>
+                <td style="text-align:center;">
+                  <input class="form-radio validate[required]" type="radio" name="q23_overallHow23" value="5" title="5" id="input_23_5" required="" />
+                </td>
+                <td>
+                  <label for="input_23_5"> Très satisfait </label>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </li>
+      <li class="form-line jf-required" data-type="control_scale" id="id_59">
+        <label class="form-label form-label-top form-label-auto" id="label_59" for="input_59">
+          Votre humeur du jour :
+          <span class="form-required">
+            *
+          </span>
+        </label>
+        <div id="cid_59" class="form-input-wide jf-required">
+          <table summary="" cellpadding="4" cellspacing="0" class="form-scale-table" data-component="scale">
+            <tbody>
+              <tr>
+                <th>
+                   
+                </th>
+                <th style="text-align:center;">
+                  <label for="input_59_1"> 1 </label>
+                </th>
+                <th style="text-align:center;">
+                  <label for="input_59_2"> 2 </label>
+                </th>
+                <th style="text-align:center;">
+                  <label for="input_59_3"> 3 </label>
+                </th>
+                <th style="text-align:center;">
+                  <label for="input_59_4"> 4 </label>
+                </th>
+                <th style="text-align:center;">
+                  <label for="input_59_5"> 5 </label>
+                </th>
+                <th>
+                   
+                </th>
+              </tr>
+              <tr>
+                <td>
+                  <label for="input_59_1"> De très mauvaise humeur </label>
+                </td>
+                <td style="text-align:center;">
+                  <input class="form-radio validate[required]" type="radio" name="q59_votreSatisfaction" value="1" title="1" id="input_59_1" required="" />
+                </td>
+                <td style="text-align:center;">
+                  <input class="form-radio validate[required]" type="radio" name="q59_votreSatisfaction" value="2" title="2" id="input_59_2" required="" />
+                </td>
+                <td style="text-align:center;">
+                  <input class="form-radio validate[required]" type="radio" name="q59_votreSatisfaction" value="3" title="3" id="input_59_3" required="" />
+                </td>
+                <td style="text-align:center;">
+                  <input class="form-radio validate[required]" type="radio" name="q59_votreSatisfaction" value="4" title="4" id="input_59_4" required="" />
+                </td>
+                <td style="text-align:center;">
+                  <input class="form-radio validate[required]" type="radio" name="q59_votreSatisfaction" value="5" title="5" id="input_59_5" required="" />
+                </td>
+                <td>
+                  <label for="input_59_5"> De très bonne humeur </label>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </li>
+      <li class="form-line jf-required" data-type="control_scale" id="id_60">
+        <label class="form-label form-label-top form-label-auto" id="label_60" for="input_60">
+          Avez-vous trouvé qu’il y avait une grande variété d’espèces exposées ?
+          <span class="form-required">
+            *
+          </span>
+        </label>
+        <div id="cid_60" class="form-input-wide jf-required">
+          <table summary="" cellpadding="4" cellspacing="0" class="form-scale-table" data-component="scale">
+            <tbody>
+              <tr>
+                <th>
+                   
+                </th>
+                <th style="text-align:center;">
+                  <label for="input_60_1"> 1 </label>
+                </th>
+                <th style="text-align:center;">
+                  <label for="input_60_2"> 2 </label>
+                </th>
+                <th style="text-align:center;">
+                  <label for="input_60_3"> 3 </label>
+                </th>
+                <th style="text-align:center;">
+                  <label for="input_60_4"> 4 </label>
+                </th>
+                <th style="text-align:center;">
+                  <label for="input_60_5"> 5 </label>
+                </th>
+                <th>
+                   
+                </th>
+              </tr>
+              <tr>
+                <td>
+                  <label for="input_60_1"> Trop peu d&#x27;espèces </label>
+                </td>
+                <td style="text-align:center;">
+                  <input class="form-radio validate[required]" type="radio" name="q60_votreSatisfaction60" value="1" title="1" id="input_60_1" required="" />
+                </td>
+                <td style="text-align:center;">
+                  <input class="form-radio validate[required]" type="radio" name="q60_votreSatisfaction60" value="2" title="2" id="input_60_2" required="" />
+                </td>
+                <td style="text-align:center;">
+                  <input class="form-radio validate[required]" type="radio" name="q60_votreSatisfaction60" value="3" title="3" id="input_60_3" required="" />
+                </td>
+                <td style="text-align:center;">
+                  <input class="form-radio validate[required]" type="radio" name="q60_votreSatisfaction60" value="4" title="4" id="input_60_4" required="" />
+                </td>
+                <td style="text-align:center;">
+                  <input class="form-radio validate[required]" type="radio" name="q60_votreSatisfaction60" value="5" title="5" id="input_60_5" required="" />
+                </td>
+                <td>
+                  <label for="input_60_5"> Beaucoup d&#x27;espèces différentes </label>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </li>
+      <li class="form-line jf-required" data-type="control_scale" id="id_61">
+        <label class="form-label form-label-top form-label-auto" id="label_61" for="input_61">
+          A quel point avez-vous été gêné(e) par la foule durant la visite ?
+          <span class="form-required">
+            *
+          </span>
+        </label>
+        <div id="cid_61" class="form-input-wide jf-required">
+          <table summary="" cellpadding="4" cellspacing="0" class="form-scale-table" data-component="scale">
+            <tbody>
+              <tr>
+                <th>
+                   
+                </th>
+                <th style="text-align:center;">
+                  <label for="input_61_1"> 1 </label>
+                </th>
+                <th style="text-align:center;">
+                  <label for="input_61_2"> 2 </label>
+                </th>
+                <th style="text-align:center;">
+                  <label for="input_61_3"> 3 </label>
+                </th>
+                <th style="text-align:center;">
+                  <label for="input_61_4"> 4 </label>
+                </th>
+                <th style="text-align:center;">
+                  <label for="input_61_5"> 5 </label>
+                </th>
+                <th>
+                   
+                </th>
+              </tr>
+              <tr>
+                <td>
+                  <label for="input_61_1"> Très gêné(e) </label>
+                </td>
+                <td style="text-align:center;">
+                  <input class="form-radio validate[required]" type="radio" name="q61_votreSatisfaction61" value="1" title="1" id="input_61_1" required="" />
+                </td>
+                <td style="text-align:center;">
+                  <input class="form-radio validate[required]" type="radio" name="q61_votreSatisfaction61" value="2" title="2" id="input_61_2" required="" />
+                </td>
+                <td style="text-align:center;">
+                  <input class="form-radio validate[required]" type="radio" name="q61_votreSatisfaction61" value="3" title="3" id="input_61_3" required="" />
+                </td>
+                <td style="text-align:center;">
+                  <input class="form-radio validate[required]" type="radio" name="q61_votreSatisfaction61" value="4" title="4" id="input_61_4" required="" />
+                </td>
+                <td style="text-align:center;">
+                  <input class="form-radio validate[required]" type="radio" name="q61_votreSatisfaction61" value="5" title="5" id="input_61_5" required="" />
+                </td>
+                <td>
+                  <label for="input_61_5"> Pas du tout gêné(e) </label>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </li>
+      <li class="form-line jf-required" data-type="control_scale" id="id_62">
+        <label class="form-label form-label-top form-label-auto" id="label_62" for="input_62">
+          Avez-vous eu l’impression de parcourir une grande distance dans le Muséum Aquarium ?
+          <span class="form-required">
+            *
+          </span>
+        </label>
+        <div id="cid_62" class="form-input-wide jf-required">
+          <table summary="" cellpadding="4" cellspacing="0" class="form-scale-table" data-component="scale">
+            <tbody>
+              <tr>
+                <th>
+                   
+                </th>
+                <th style="text-align:center;">
+                  <label for="input_62_1"> 1 </label>
+                </th>
+                <th style="text-align:center;">
+                  <label for="input_62_2"> 2 </label>
+                </th>
+                <th style="text-align:center;">
+                  <label for="input_62_3"> 3 </label>
+                </th>
+                <th style="text-align:center;">
+                  <label for="input_62_4"> 4 </label>
+                </th>
+                <th style="text-align:center;">
+                  <label for="input_62_5"> 5 </label>
+                </th>
+                <th>
+                   
+                </th>
+              </tr>
+              <tr>
+                <td>
+                  <label for="input_62_1"> Oui </label>
+                </td>
+                <td style="text-align:center;">
+                  <input class="form-radio validate[required]" type="radio" name="q62_votreSatisfaction62" value="1" title="1" id="input_62_1" required="" />
+                </td>
+                <td style="text-align:center;">
+                  <input class="form-radio validate[required]" type="radio" name="q62_votreSatisfaction62" value="2" title="2" id="input_62_2" required="" />
+                </td>
+                <td style="text-align:center;">
+                  <input class="form-radio validate[required]" type="radio" name="q62_votreSatisfaction62" value="3" title="3" id="input_62_3" required="" />
+                </td>
+                <td style="text-align:center;">
+                  <input class="form-radio validate[required]" type="radio" name="q62_votreSatisfaction62" value="4" title="4" id="input_62_4" required="" />
+                </td>
+                <td style="text-align:center;">
+                  <input class="form-radio validate[required]" type="radio" name="q62_votreSatisfaction62" value="5" title="5" id="input_62_5" required="" />
+                </td>
+                <td>
+                  <label for="input_62_5"> Non </label>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </li>
+      <li class="form-line jf-required" data-type="control_scale" id="id_63">
+        <label class="form-label form-label-top form-label-auto" id="label_63" for="input_63">
+          Quel est votre niveau de fatigue à l’issue de la visite ?
+          <span class="form-required">
+            *
+          </span>
+        </label>
+        <div id="cid_63" class="form-input-wide jf-required">
+          <table summary="" cellpadding="4" cellspacing="0" class="form-scale-table" data-component="scale">
+            <tbody>
+              <tr>
+                <th>
+                   
+                </th>
+                <th style="text-align:center;">
+                  <label for="input_63_1"> 1 </label>
+                </th>
+                <th style="text-align:center;">
+                  <label for="input_63_2"> 2 </label>
+                </th>
+                <th style="text-align:center;">
+                  <label for="input_63_3"> 3 </label>
+                </th>
+                <th style="text-align:center;">
+                  <label for="input_63_4"> 4 </label>
+                </th>
+                <th style="text-align:center;">
+                  <label for="input_63_5"> 5 </label>
+                </th>
+                <th>
+                   
+                </th>
+              </tr>
+              <tr>
+                <td>
+                  <label for="input_63_1"> Très fatigué </label>
+                </td>
+                <td style="text-align:center;">
+                  <input class="form-radio validate[required]" type="radio" name="q63_votreSatisfaction63" value="1" title="1" id="input_63_1" required="" />
+                </td>
+                <td style="text-align:center;">
+                  <input class="form-radio validate[required]" type="radio" name="q63_votreSatisfaction63" value="2" title="2" id="input_63_2" required="" />
+                </td>
+                <td style="text-align:center;">
+                  <input class="form-radio validate[required]" type="radio" name="q63_votreSatisfaction63" value="3" title="3" id="input_63_3" required="" />
+                </td>
+                <td style="text-align:center;">
+                  <input class="form-radio validate[required]" type="radio" name="q63_votreSatisfaction63" value="4" title="4" id="input_63_4" required="" />
+                </td>
+                <td style="text-align:center;">
+                  <input class="form-radio validate[required]" type="radio" name="q63_votreSatisfaction63" value="5" title="5" id="input_63_5" required="" />
+                </td>
+                <td>
+                  <label for="input_63_5"> Pas fatigué </label>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </li>
+      <li class="form-line jf-required" data-type="control_checkbox" id="id_64">
+        <label class="form-label form-label-top form-label-auto" id="label_64" for="input_64">
+          Vous trouvez que l’utilisation d’une application sur smartphone ou tablette dans un musée est :
+          <span class="form-required">
+            *
+          </span>
+        </label>
+        <div id="cid_64" class="form-input-wide jf-required">
+          <div class="form-single-column" data-component="checkbox">
+            <span class="form-checkbox-item" style="clear:left;">
+              <span class="dragger-item">
+              </span>
+              <input type="checkbox" class="form-checkbox validate[required]" id="input_64_0" name="q64_cliquerPour[]" value="Utile pour recevoir des informations supplémentaires sur les oeuvres" required="" />
+              <label id="label_input_64_0" for="input_64_0"> Utile pour recevoir des informations supplémentaires sur les oeuvres </label>
+            </span>
+            <span class="form-checkbox-item" style="clear:left;">
+              <span class="dragger-item">
+              </span>
+              <input type="checkbox" class="form-checkbox validate[required]" id="input_64_1" name="q64_cliquerPour[]" value="Utile pour obtenir des recommandations de parcours en fonction de mes préférences" required="" />
+              <label id="label_input_64_1" for="input_64_1"> Utile pour obtenir des recommandations de parcours en fonction de mes préférences </label>
+            </span>
+            <span class="form-checkbox-item" style="clear:left;">
+              <span class="dragger-item">
+              </span>
+              <input type="checkbox" class="form-checkbox validate[required]" id="input_64_2" name="q64_cliquerPour[]" value="Utile pour enrichir la visite avec des jeux ludiques" required="" />
+              <label id="label_input_64_2" for="input_64_2"> Utile pour enrichir la visite avec des jeux ludiques </label>
+            </span>
+            <span class="form-checkbox-item" style="clear:left;">
+              <span class="dragger-item">
+              </span>
+              <input type="checkbox" class="form-checkbox validate[required]" id="input_64_3" name="q64_cliquerPour[]" value="Inappropriée" required="" />
+              <label id="label_input_64_3" for="input_64_3"> Inappropriée </label>
+            </span>
+            <span class="form-checkbox-item" style="clear:left;">
+              <label style="display:none;" for="other_64"> Other option </label>
+              <input type="checkbox" class="form-checkbox-other form-checkbox validate[required]" name="q64_cliquerPour[other]" id="other_64" value="other" />
+              <input type="text" class="form-checkbox-other-input form-textbox" name="q64_cliquerPour[other]" data-otherhint="Autre" placeholder="Autre" size="15" id="input_64" />
+              <br/>
+            </span>
+          </div>
+        </div>
+      </li>
+      <li class="form-line" data-type="control_textarea" id="id_65">
+        <label class="form-label form-label-top form-label-auto" id="label_65" for="input_65"> Avez-vous des commentaires à l’issue de votre visite ? </label>
+        <div id="cid_65" class="form-input-wide jf-required">
+          <textarea id="input_65" class="form-textarea" name="q65_cliquerPour65" cols="40" rows="6" data-component="textarea"></textarea>
+        </div>
+      </li>
+	  <!-- Bouton envoyer qui envoie les réponses sur le GoogleSheet-->
+      <li class="form-line" data-type="control_button" id="id_2">
+        <div id="cid_2" class="form-input-wide">
+          <div style="margin-left:156px;" class="form-buttons-wrapper">
+            <button id="input_2" type="submit" class="form-submit-button form-submit-button-light" data-component="button">
+              Envoyer
+            </button>
+          </div>
+        </div>
+      </li>
+      <li style="display:none">
+        Should be Empty:
+        <input type="text" name="website" value="" />
+      </li>
+    </ul>
+  </div>
+    <script>
+  JotForm.showJotFormPowered = false;
+  </script>
+    <input type="hidden" id="simple_spc" name="simple_spc" value="71401283074347" />
+    <script type="text/javascript">
+  document.getElementById("si" + "mple" + "_spc").value = "71401283074347-71401283074347";
+  </script>
+  </form>
+</div>
+  
+ 
+
+  <!-- API Keys for the app -->
+  <script type="text/javascript" src="js/APIKeys.js"></script>
+
+  <!-- Google Maps Javascript API, Api key is set in www/js/APIKeys.js -->
+  <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDoBTYBrWksKybRo8k_W-EuYRkxKbySCnE' id='googleMapsKey'></script>
+  <!-- <script>
+  var googleMapsKey = document.getElementById('googleMapsKey');
+  googleMapsKey.src = 'https://maps.googleapis.com/maps/api/js?key=' + GOOGLE_API_KEY;
+  </script> -->
+
+  <!-- This class helps to rotate the overlay for Google Maps -->
+  <script type="text/javascript" src="js/ClassForMapOverlay.js"></script>
+
+  <!-- Functionality of the app -->
+  <script type="text/javascript" src="js/index.js"></script>
+  <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+  <script>jQuery.noConflict();</script>
+  
+  <script type="text/javascript" src="cordova.js"></script>
+  
+  <!-- Script to set up the API Keys for function calls -->
+  <script>
+  // on donne l'id du visiteur à l'input caché dans le questionnaire
+  document.getElementById("input_66").value = cordovaExample.idClient;
+  
+  // fonction servant à cacher le plan et afficher le questionnaire sur la page
+  function passerAuxQuestions(){
+	document.getElementById("plan").style.display = "none";
+	document.getElementById("quizz").style.display = "block";
+  }
+  
+  //Pour changer l'état des boutons
+  var setPositionButton = document.getElementById('setPositionButton');
+  var startPositioningButton = document.getElementById('startPositioningButton');
+  var stopPositioningButton = document.getElementById('stopPositioningButton');
+  stopPositioningButton.disabled = true;
+  stopPositioningButton.style.background = '#D3D3D3';
+  setPositionButton.onclick = function() {
+    cordovaExample.setPosition({regionId: IA_FLOORPLAN_ID});
+  };
+  startPositioningButton.onclick = function() {
+    startPositioningButton.disabled = true;
+    startPositioningButton.style.background = '#D3D3D3';
+    setPositionButton.disabled = true;
+    setPositionButton.style.background = '#D3D3D3';
+    stopPositioningButton.disabled = false;
+    stopPositioningButton.style.background = '#00A5F6';
+    cordovaExample.startPositioning();
+  };
+  stopPositioningButton.onclick = function() {
+    startPositioningButton.disabled = false;
+    startPositioningButton.style.background = '#00A5F6';
+    setPositionButton.disabled = false;
+    setPositionButton.style.background = '#00A5F6';
+    stopPositioningButton.disabled = true;
+    stopPositioningButton.style.background = '#D3D3D3';
+    cordovaExample.stopPositioning();
+  };
+  </script>
+</body>
+</html>
+<script type="text/javascript">JotForm.ownerView=true;</script><script type="text/javascript">JotForm.forwardToEu=true;</script>
